@@ -1,5 +1,4 @@
 import pandas as pd
-import numpy as np
 
 
 class Individual:
@@ -36,62 +35,105 @@ class Individual:
         hotel_emissions_totals = nights * 0.0383
         return hotel_emissions_totals
 
-    def transportation_emissions(self, rail, bus, car, bike_walk):
-
+    def rail_emissions(self, rail):
         if rail == 0:
             rail_emissions_totals = 0
         elif rail == 1:
-            rail_emissions_totals = 0.0007
+            rail_emissions_totals = 0.0007 * 52
         elif rail == 2:
-            rail_emissions_totals = 0.0014
+            rail_emissions_totals = 0.0014 * 52
         elif rail == 3:
-            rail_emissions_totals = 0.0021
+            rail_emissions_totals = 0.0021 * 52
         elif rail == 4:
-            rail_emissions_totals = 0.0028
+            rail_emissions_totals = 0.0028 * 52
         elif rail == 5:
-            rail_emissions_totals = 0.0042
+            rail_emissions_totals = 0.0042 * 52
         elif rail == 6:
-            rail_emissions_totals = 0.0056
+            rail_emissions_totals = 0.0056 * 52
+        return rail_emissions_totals
 
+    def bus_emissions(self, bus):
         if bus == 0:
             bus_emissions_totals = 0
         elif bus == 1:
-            bus_emissions_totals = 0.0006
+            bus_emissions_totals = 0.0006 * 52
         elif bus == 2:
-            bus_emissions_totals = 0.0012
+            bus_emissions_totals = 0.0012 * 52
         elif bus == 3:
-            bus_emissions_totals = 0.0018
+            bus_emissions_totals = 0.0018 * 52
         elif bus == 4:
-            bus_emissions_totals = 0.0024
+            bus_emissions_totals = 0.0024 * 52
         elif bus == 5:
-            bus_emissions_totals = 0.0036
+            bus_emissions_totals = 0.0036 * 52
         elif bus == 6:
-            bus_emissions_totals = 0.0048
+            bus_emissions_totals = 0.0048 * 52
+        return bus_emissions_totals
+
+    def car_emissions(self, miles, mpg):
+        car_emissions_total = (miles /mpg) * 0.0089
+        return car_emissions_total
+
+
+
 
 
 if __name__ == "__main__":
     choice = 1
     nameList = []
     emissionList = []
+    dietList = []
+    longFlightList = []
+    mediumFlightList = []
+    shortFlightList = []
+    railEmissionsList = []
+    carEmissionsList = []
+    busEmissionsList = []
+    transportationEmissionsList = []
 
     while choice != 0:
         d = Individual()
-        d.name = d.name_individual(input("Enter name:"))
-        d.emissions = d.diet_emissions(
+        d.name = d.name_individual(input("Enter name: "))
+        diet = d.diet_emissions(
             float(input("Choose your diet: \n Meat Lover = 0 \n Average = 1 \n No Beef = 2 " +
                         "\n Vegetarian = 3 \n Vegan = 4\n")))
+        d.emissions = diet
+        dietList.append(diet)
         long_flights = float(input("Enter number of long round-trip flight"
-                                   "(2,300+ miles) you made this year"))
+                                   "(2,300+ miles) you made this year\n"))
         medium_flights = float(input("Enter number of medium round-trip flight"
-                                     "(300-2299 miles) you made this year"))
+                                     "(300-2299 miles) you made this year\n"))
         short_flights = float(input("Enter number of long round-trip flight"
-                                    "(under 300 miles) you made this year"))
+                                    "(under 300 miles) you made this year\n"))
+        longFlightList.append(long_flights)
+        mediumFlightList.append(medium_flights)
+        shortFlightList.append(short_flights)
+
         d.emissions += d.flight_emissions(long_flights, medium_flights, short_flights)
-        nights_in_hotel = int(input("Enter how many nights you have spent in a hotel per year"))
+        nights_in_hotel = int(input("Enter how many nights you have spent in a hotel per year\n"))
         d.emissions += d.hotel_emmissions(nights_in_hotel)
+
+        rail = d.rail_emissions(int(input("How many miles do you travel by train weekly: \n 0 miles = 0 \n 1-5 miles = 1 \n 6-10 miles = 2 " +
+                        "\n 11-20 miles = 3 \n 20-30 miles = 4\n 30+ miles = 5\n")))
+        bus = d.bus_emissions(int(input("How many miles do you travel by bus weekly: \n 0 miles = 0 \n 1-5 miles = 1 \n 6-10 miles = 2 " +
+                         "\n 11-20 miles = 3 \n 20-30 miles = 4\n 30+ miles = 5\n")))
+        miles = int(input("How many miles do you drive yearly on average. \n"))
+        mpg = int(input("What is your vehicles average mpg \n"))
+        car = d.car_emissions(miles, mpg)
+        transportation_emissions_total = rail + bus + car
+        railEmissionsList.append(rail)
+        busEmissionsList.append(bus)
+        carEmissionsList.append(car)
+        transportationEmissionsList.append(transportation_emissions_total)
+
+
+        d.emissions += transportation_emissions_total
         nameList.append(d.name)
         emissionList.append(d.emissions)
-        choice = int(input("Enter 0 to end Enter 1 to add another person"))
+
+        choice = int(input("Enter 0 to end Enter 1 to add another person \n"))
         if choice == 0:
-            df = pd.DataFrame({"Names": nameList, "Emissions": emissionList})
+            df = pd.DataFrame({"Names": nameList, "Emissions": emissionList, "Long FLights":longFlightList,
+                               "Medium Flights": mediumFlightList, "Short Flights": shortFlightList,
+                               "Rail": railEmissionsList, "Bus": busEmissionsList, "Car": carEmissionsList,
+                               "Transportation Total": transportationEmissionsList})
             print(df)
