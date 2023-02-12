@@ -1,5 +1,3 @@
-import pandas as pd
-from sqlalchemy import create_engine
 
 class Individual:
 
@@ -13,15 +11,15 @@ class Individual:
 
     def diet_emissions(self, choice):
         diet = choice
-        if choice == 0:  # Meat lover
+        if diet == 0:  # Meat lover
             diet_emissions_totals = 3.3
-        elif choice == 1:  # average
+        elif diet == 1:  # average
             diet_emissions_totals = 2.5
-        elif choice == 2:  # No beef
+        elif diet == 2:  # No beef
             diet_emissions_totals = 1.9
-        elif choice == 3:  # Vegetarian
+        elif diet == 3:  # Vegetarian
             diet_emissions_totals = 1.7
-        elif choice == 4:  # Vegan
+        elif diet == 4:  # Vegan
             diet_emissions_totals = 1.5
         return diet_emissions_totals
 
