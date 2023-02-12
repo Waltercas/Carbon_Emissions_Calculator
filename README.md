@@ -1,2 +1,2 @@
-# Waltercas.github.io
+# Waltercas
 Auburn Hackathon Application
