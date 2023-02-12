@@ -1,5 +1,5 @@
 import pandas as pd
-
+from sqlalchemy import create_engine
 
 class Individual:
 
@@ -25,11 +25,17 @@ class Individual:
             diet_emissions_totals = 1.5
         return diet_emissions_totals
 
-    def flight_emissions(self, long_distance_flights, medium_distance_flights, short_distance_flights):
-        flight_emissions_totals = long_distance_flights * 0.51
-        flight_emissions_totals += medium_distance_flights * 0.196
-        flight_emissions_totals += short_distance_flights * 0.0375
-        return flight_emissions_totals
+    def long_flight_emissions(self,short_distance_flights):
+        short_flight_total= short_distance_flights * 0.0375
+        return short_flight_total
+
+    def medium_flight_emissions(self, medium_distance_flights):
+        medium_flight_total = medium_distance_flights * 0.196
+        return medium_flight_total
+
+    def short_flight_emissions(self, short_distance_flights):
+        short_flight_total = short_distance_flights * 0.0375
+        return short_flight_total
 
     def hotel_emmissions(self, nights):
         hotel_emissions_totals = nights * 0.0383
@@ -98,17 +104,17 @@ if __name__ == "__main__":
                         "\n Vegetarian = 3 \n Vegan = 4\n")))
         d.emissions = diet
         dietList.append(diet)
-        long_flights = float(input("Enter number of long round-trip flight"
-                                   "(2,300+ miles) you made this year\n"))
-        medium_flights = float(input("Enter number of medium round-trip flight"
-                                     "(300-2299 miles) you made this year\n"))
-        short_flights = float(input("Enter number of long round-trip flight"
-                                    "(under 300 miles) you made this year\n"))
+        long_flights = d.long_flight_emissions(float(input("Enter number of long round-trip flight"
+                                   "(2,300+ miles) you made this year\n")))
+        medium_flights = d.medium_flight_emissions(float(input("Enter number of medium round-trip flight"
+                                     "(300-2299 miles) you made this year\n")))
+        short_flights = d.short_flight_emissions(float(input("Enter number of long round-trip flight"
+                                    "(under 300 miles) you made this year\n")))
         longFlightList.append(long_flights)
         mediumFlightList.append(medium_flights)
         shortFlightList.append(short_flights)
 
-        d.emissions += d.flight_emissions(long_flights, medium_flights, short_flights)
+        d.emissions += short_flights + medium_flights + long_flights
         nights_in_hotel = int(input("Enter how many nights you have spent in a hotel per year\n"))
         d.emissions += d.hotel_emmissions(nights_in_hotel)
 
@@ -119,6 +125,7 @@ if __name__ == "__main__":
         miles = int(input("How many miles do you drive yearly on average. \n"))
         mpg = int(input("What is your vehicles average mpg \n"))
         car = d.car_emissions(miles, mpg)
+
         transportation_emissions_total = rail + bus + car
         railEmissionsList.append(rail)
         busEmissionsList.append(bus)
@@ -137,3 +144,5 @@ if __name__ == "__main__":
                                "Rail": railEmissionsList, "Bus": busEmissionsList, "Car": carEmissionsList,
                                "Transportation Total": transportationEmissionsList})
             print(df)
+
+
