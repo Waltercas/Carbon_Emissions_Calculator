@@ -9,7 +9,11 @@ formData={}
 @app.route('/')
 def home():
     return render_template('index.html')
-"""@app.route("/", methods=['POST','GET'])
+
+@app.route("/index2")
+def index2():
+    return render_template('index2.html')
+@app.route("/", methods=['POST','GET'])
 def test_flsk():
     if request.method == 'POST':
         name = request.form["name"]
@@ -44,7 +48,7 @@ def test_flsk():
     else:
         print(123)
         return render_template("index2.html")
-"""
+
 
 conn = psycopg2.connect(user="postgres",
                         password="postgres",
