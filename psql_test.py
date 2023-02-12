@@ -1,4 +1,3 @@
-from sqlalchemy import create_engine
 import utils
 import psycopg2
 person = utils.Individual()
