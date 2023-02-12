@@ -1,2 +1,2 @@
-# generic_app
+# Waltercas.github.io
 Auburn Hackathon Application
